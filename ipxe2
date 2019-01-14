@@ -2,6 +2,6 @@
 
 set base http://mirror.leaseweb.com/centos/7/os/x86_64
 
-kernel ${base}/images/pxeboot/vmlinuz initrd=initrd.img repo=${base} ip=:::::ens2f0:dhcp ks=https://raw.githubusercontent.com/epanoff/raid_click/master/kickstart_lvm1
+kernel ${base}/images/pxeboot/vmlinuz initrd=initrd.img repo=${base} ip=:::::ens2f0:dhcp ks=https://raw.githubusercontent.com/epanoff/raid_click/master/kickstart_lvm2
 initrd ${base}/images/pxeboot/initrd.img
 boot
