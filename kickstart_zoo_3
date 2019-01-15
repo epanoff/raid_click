@@ -15,7 +15,9 @@ bootloader --append="rd.auto=1 crashkernel=auto" --location=mbr --driveorder="sd
 
 zerombr
 clearpart --all
-
+# Disk partitioning information
+part biosboot --fstype=biosboot --size=1 --ondisk=/dev/sda
+part biosboot --fstype=biosboot --size=1 --ondisk=/dev/sdb
 part raid.11 --size 1024 -asprimary --ondrive=sda
 part raid.12 --size 1024 --asprimary --ondrive=sda
 part raid.13 --size 1024 --asprimary --grow  --ondrive=sda
