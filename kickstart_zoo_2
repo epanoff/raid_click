@@ -19,7 +19,9 @@ part raid.13 --size 1024 --fstype="mdmember" --asprimary --grow  --ondrive=sda
 part raid.21 --size 1024 --fstype="mdmember"  --asprimary --ondrive=sdb
 part raid.22 --size 1024 --fstype="mdmember"  --asprimary --ondrive=sdb
 part raid.23 --size 1024 --fstype="mdmember" --asprimary --grow  --ondrive=sdb
-
+raid / --device=1 --fstype="ext4" --level=RAID1 raid.13 raid.23 
+raid /boot --device=0 --fstype="ext2" --level=RAID1 raid.11 raid.21
+raid swap --fstype swap --device swap --level=RAID1 raid.12 raid.22
 %post
 
 echo "nameserver 85.17.150.123" > /etc/resolv.conf
