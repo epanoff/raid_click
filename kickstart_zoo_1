@@ -10,25 +10,27 @@ selinux --disabled
 reboot
 network  --bootproto=static --gateway=81.171.22.30 --hostname=zoo-clickhouse01.lw.eu.prod.appmetr.pix.team --ip=81.171.22.26 --nameserver=85.17.150.123,85.17.96.69,62.212.64.122 --netmask=255.255.255.192 --noipv6 --activate
 
-bootloader --append="rd.auto=1 crashkernel=auto" --location=mbr --driveorder="sda,sdb" --boot-drive=sda
-
-
-zerombr
-clearpart --all
-
+clearpart --all --initlabel --drives=sda,sdb
+ignoredisk --only-use=sda,sdb
+bootloader  --location=mbr --driveorder=sda,sdb --append="crashkernel=auto"
 # Disk partitioning information
 part biosboot --fstype=biosboot --size=1 --ondisk=/dev/sda
 part biosboot --fstype=biosboot --size=1 --ondisk=/dev/sdb
 
-part raid.11 --size 1024 --fstype="mdmember"  --asprimary --ondrive=sda
-part raid.12 --size 1024 --fstype="mdmember"  --asprimary --ondrive=sda
-part raid.13 --size 1024 --fstype="mdmember" --asprimary --grow  --ondrive=sda
-part raid.21 --size 1024 --fstype="mdmember"  --asprimary --ondrive=sdb
-part raid.22 --size 1024 --fstype="mdmember"  --asprimary --ondrive=sdb
-part raid.23 --size 1024 --fstype="mdmember" --asprimary --grow  --ondrive=sdb
-raid / --device=1 --fstype="ext4" --level=RAID1 raid.13 raid.23 
-raid /boot --device=0 --fstype="ext2" --level=RAID1 raid.11 raid.21
-raid swap --fstype swap --device swap --level=RAID1 raid.12 raid.22
+# /boot
+part raid.01 --ondisk=sda --asprimary --size=1024
+part raid.02 --ondisk=sdb --asprimary --size=1024
+# /
+part raid.11 --ondisk=sda --asprimary --size=40960 --grow
+part raid.12 --ondisk=sdb --asprimary --size=40960 --grow
+# <swap>
+part raid.21 --ondisk=sda --asprimary --size=16384
+part raid.22 --ondisk=sdb --asprimary --size=16384
+
+raid /boot --fstype=ext4 --level=1 --device=md0 raid.01 raid.02
+raid /     --fstype=ext4 --level=1 --device=md1 raid.11 raid.12
+raid swap  --fstype=swap --level=1 --device=md2 raid.21 raid.22
+
 
 %post
 
