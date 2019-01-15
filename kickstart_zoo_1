@@ -10,7 +10,7 @@ selinux --disabled
 reboot
 network  --bootproto=static --gateway=81.171.22.30 --hostname=zoo-clickhouse01.lw.eu.prod.appmetr.pix.team --ip=81.171.22.26 --nameserver=85.17.150.123,85.17.96.69,62.212.64.122 --netmask=255.255.255.192 --noipv6 --activate
 
-bootloader --append=" crashkernel=auto" --location=mbr --driveorder="sda,sdb" --boot-drive=sda
+bootloader --append="rd.auto=1 crashkernel=auto" --location=mbr --driveorder="sda,sdb" --boot-drive=sda
 
 
 zerombr
