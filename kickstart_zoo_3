@@ -12,18 +12,16 @@ network  --bootproto=static --gateway=37.48.72.190 --hostname=zoo-clickhouse03.l
 
 bootloader --append=" crashkernel=auto" --location=mbr --driveorder="sda,sdb" --boot-drive=sda
 
-clearpart --drives=sda,sdb
+
 zerombr
+clearpart --all
 
-part raid.11 --size 1024 --fstype="mdmember"  --asprimary --ondrive=sda
-part raid.12 --size 1024 --fstype="mdmember"  --asprimary --ondrive=sda
-part raid.13 --size 1024 --fstype="mdmember" --asprimary --grow  --ondrive=sda
-part raid.21 --size 1024 --fstype="mdmember"  --asprimary --ondrive=sdb
-part raid.22 --size 1024 --fstype="mdmember"  --asprimary --ondrive=sdb
-part raid.23 --size 1024 --fstype="mdmember" --asprimary --grow  --ondrive=sdb
-
-
-# You can add --spares=x
+part raid.11 --size 1024 -asprimary --ondrive=sda
+part raid.12 --size 1024 --asprimary --ondrive=sda
+part raid.13 --size 1024 --asprimary --grow  --ondrive=sda
+part raid.21 --size 1024  --asprimary --ondrive=sdb
+part raid.22 --size 1024  --asprimary --ondrive=sdb
+part raid.23 --size 1024  --asprimary --grow  --ondrive=sdb
 raid / --device=1 --fstype="ext4" --level=RAID1 raid.13 raid.23 
 raid /boot --device=0 --fstype="ext2" --level=RAID1 raid.11 raid.21
 raid swap --fstype swap --device swap --level=RAID1 raid.12 raid.22
