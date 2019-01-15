@@ -11,7 +11,8 @@ network  --bootproto=static --gateway=81.171.22.30 --hostname=zoo-clickhouse01.l
 
 bootloader --append=" crashkernel=auto" --location=mbr --driveorder="sda,sdb" --boot-drive=sda
 
-clearpart  --all --initlabel --drives=sda, sdb
+clearpart --drives=sda,sdb
+zerombr
 
 part raid.11 --size 1024 --fstype="mdmember"  --asprimary --ondrive=sda
 part raid.12 --size 1024 --fstype="mdmember"  --asprimary --ondrive=sda
